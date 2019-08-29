@@ -19,7 +19,7 @@ mongo = PyMongo(app, retryWrites=False)
 cors = CORS(app)
 
 
-@app.route("/login", methods=["POST"])
+@app.route("/signin", methods=["POST"])
 def index():
     add = mongo.db.user
     data = request.get_json(force=True)
