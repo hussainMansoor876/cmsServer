@@ -19,7 +19,7 @@ app.config['MONGO_DBNAME'] = os.getenv('MONGO_DBNAME')
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 mongo = PyMongo(app, retryWrites=False)
 
-cors = CORS(app)
+CORS(app)
 
 
 @app.route("/", methods=["POST"])
