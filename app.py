@@ -6,6 +6,9 @@ from dotenv import load_dotenv
 import bcrypt
 import os
 
+
+load_dotenv()
+
 from flask_cors import CORS, cross_origin
 from routes.login import index_blueprint
 
@@ -19,7 +22,7 @@ mongo = PyMongo(app, retryWrites=False)
 cors = CORS(app)
 
 
-@app.route("/signin", methods=["POST"])
+@app.route("/", methods=["POST"])
 def index():
     add = mongo.db.user
     data = request.get_json(force=True)
@@ -32,13 +35,8 @@ def index():
             return jsonify({'success': False, 'message': 'Invalid Email Or Password!!!'})
     else:
         return jsonify({'success': False, 'message': 'Invalid Email Or Password!!!'})
-    # output = []
-    # for s in add.find():
-    #     output.append({'name': s['name'], 'email': s['email'],
-    #                   'password': s['password'], '_id': str(s['_id'])})
-    # return jsonify({'result': output})
 
-@app('/register', methods=["POST"])
+@app.route("/register", methods=["POST"])
 def registerUser():
     add = mongo.db.user
     data = request.get_json(force=True)
