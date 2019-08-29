@@ -3,13 +3,11 @@ render_template, url_for, \
 redirect, request, session, redirect, jsonify
 from flask_pymongo import PyMongo
 from routes.login import index_blueprint
+# print(bcrypt.checkpw(password.encode('utf8'), hashed_password))
+
 
 
 app = Flask(__name__)
-# app.config['MONGO_DBNAME'] = 'cms-frontend'
-# app.config['MONGO_URI'] = 'mongodb://mansoor:mansoor11@ds311968.mlab.com:11968/cms-frontend'
-# mongo = PyMongo(app)
-
 
 app.register_blueprint(index_blueprint, url_prefix='/login')
 
