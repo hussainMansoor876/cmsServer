@@ -96,3 +96,21 @@ def gallery():
     return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
 
 
+@article_blueprint.route("/video", methods=["POST"])
+def video():
+    video = mongo.db.video
+    data = request.get_json(force=True)
+    result = video.insert_one({
+       "filename": "abc",
+        "copyright": "Mansoor",
+        "headline": "fydgyudfguygvyuxgfy",
+        "description": "nfjknjkdfkjf",
+        "keywords": "jfhdfukd",
+        "preview": "yfr",
+        "free": True,
+        "timestamps": datetime.datetime.now(),
+        "uploaded": "user",
+        "depublishing": "sgsgysy"
+    })
+    print(result.inserted_id)
+    return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
