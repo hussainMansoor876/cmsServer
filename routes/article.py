@@ -138,3 +138,14 @@ def topic():
     })
     print(result.inserted_id)
     return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
+
+
+@article_blueprint.route("/city", methods=["POST"])
+def city():
+    city = mongo.db.city
+    data = request.get_json(force=True)
+    result = city.insert_one({
+       "name": "abc",
+    })
+    print(result.inserted_id)
+    return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
