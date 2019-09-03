@@ -13,15 +13,18 @@ load_dotenv()
 app = Flask(__name__)
 app.config['MONGO_DBNAME'] = os.getenv('MONGO_DBNAME')
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
-mongo = PyMongo(app, retryWrites=False)
 
 
 index_blueprint = Blueprint('login', __name__)
+mongo = PyMongo(app, retryWrites=False)
 
-cors = CORS(index_blueprint)
+CORS(index_blueprint, origins=["http://localhost:3000", "https://quiz-assignment-8e887.firebaseapp.com/"], allow_headers=[
+        "Content-Type", "Authorization", "Access-Control-Allow-Credentials"],
+        supports_credentials=True)
 
 
 @index_blueprint.route('/', methods=["POST"])
+@cross_origin(headers=['Content-Type'])
 def loginUser():
         add = mongo.db.user
         data = request.get_json(force=True)
