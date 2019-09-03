@@ -8,6 +8,7 @@ import json
 import bcrypt
 from flask_cors import CORS, cross_origin
 
+
 load_dotenv()
 
 app = Flask(__name__)
@@ -18,33 +19,24 @@ app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 index_blueprint = Blueprint('login', __name__)
 mongo = PyMongo(app, retryWrites=False)
 
-CORS(index_blueprint, origins=["http://localhost:3000", "https://quiz-assignment-8e887.firebaseapp.com/"], allow_headers=[
-        "Content-Type", "Authorization", "Access-Control-Allow-Credentials"],
-        supports_credentials=True)
 
-
-@index_blueprint.route('/', methods=["POST"])
-@cross_origin(headers=['Content-Type'])
-def loginUser():
-        add = mongo.db.user
-        data = request.get_json(force=True)
-        existUser = add.find_one({'email': data['email']})
-        if(existUser):
-            passwordCheck=bcrypt.checkpw(data['password'].encode('utf8'), existUser['password'])
-            if(passwordCheck):
-                return jsonify({'success': True, 'message': 'User Find!!!'})
-            else:
-                return jsonify({'success': False, 'message': 'Invalid Email Or Password!!!'})
+@index_blueprint.route("/signin", methods=["POST"])
+def index():
+    add = mongo.db.user
+    data = request.get_json(force=True)
+    existUser = add.find_one({'email': data['email']})
+    if(existUser):
+        passwordCheck=bcrypt.checkpw(data['password'].encode('utf8'), existUser['password'])
+        if(passwordCheck):
+            return jsonify({'success': True, 'message': 'User Find!!!'})
         else:
             return jsonify({'success': False, 'message': 'Invalid Email Or Password!!!'})
-        output = []
-        for s in add.find():
-            output.append({'name': s['name'], 'email': s['email'],
-                        'password': s['password'], '_id': str(s['_id'])})
-        return jsonify({'result': output})
+    else:
+        return jsonify({'success': False, 'message': 'Invalid Email Or Password!!!'})
 
 
-@index_blueprint.route('/register', methods=["POST"])
+
+@index_blueprint.route("/register", methods=["POST"])
 def registerUser():
     add = mongo.db.user
     data = request.get_json(force=True)
