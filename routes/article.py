@@ -114,3 +114,15 @@ def video():
     })
     print(result.inserted_id)
     return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
+
+
+
+@article_blueprint.route("/category", methods=["POST"])
+def category():
+    category = mongo.db.category
+    data = request.get_json(force=True)
+    result = category.insert_one({
+       "name": "abc",
+    })
+    print(result.inserted_id)
+    return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
