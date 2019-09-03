@@ -21,7 +21,7 @@ mongo = PyMongo(app, retryWrites=False)
 
 
 @index_blueprint.route("/signin", methods=["POST"])
-def index():
+def signin():
     add = mongo.db.user
     data = request.get_json(force=True)
     existUser = add.find_one({'email': data['email']})
