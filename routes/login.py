@@ -45,5 +45,12 @@ def registerUser():
         return jsonify({'success': False, 'message': 'User Already Exist!!!'})
     else:
         hashed_password = bcrypt.hashpw(data['password'].encode('utf8'), bcrypt.gensalt(12))
-        add.insert_one({'name': data['name'], 'email': data['email'], 'password': hashed_password})
+        add.insert_one({ 
+            'name': data['name'], 
+            'email': data['email'], 
+            'password': hashed_password,
+            'avatar': data['avatar'],
+            'secretToken': 'secret',
+            'role': 'Admin'
+            })
         return jsonify({ 'success': True, 'message': 'Successfully Registered'})
