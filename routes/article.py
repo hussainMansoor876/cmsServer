@@ -44,7 +44,9 @@ mongo = PyMongo(app, retryWrites=False, connect= True )
 # "last_modified": 37467,
 # "image_id": "dsudhuf",
 # "video_id": "dsuhuis"
-# "createdBy": "Mansoor"
+# "createdBy": "Mansoor",
+# "user_id": "dfsudhir",
+# "slug": ["user_id", "heading", "author", "timestamps"],
 # }
 
 
@@ -81,7 +83,8 @@ def image():
         "free": True,
         "timestamps": datetime.datetime.now(),
         "uploaded": "user",
-        "depublishing": "sgsgysy"
+        "depublishing": "sgsgysy",
+        "user_id": "dfsudhir"
     })
     print(result.inserted_id)
     return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
@@ -93,7 +96,9 @@ def gallery():
     data = request.get_json(force=True)
     result = gallery.insert_one({
         "name": "abc",
-        "imageIds": []
+        "imageIds": [],
+        "slug": "dsuhirtuyuighiuy",
+        "user_id": "dfsudhir"
     })
     print(result.inserted_id)
     return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
@@ -113,7 +118,8 @@ def video():
         "free": True,
         "timestamps": datetime.datetime.now(),
         "uploaded": "user",
-        "depublishing": "sgsgysy"
+        "depublishing": "sgsgysy",
+        "user_id": "dfsudhir"
     })
     print(result.inserted_id)
     return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
@@ -126,6 +132,7 @@ def category():
     data = request.get_json(force=True)
     result = category.insert_one({
        "name": "abc",
+       "slug": ["user_id", "heading", "author", "timestamps"]
     })
     print(result.inserted_id)
     return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
@@ -137,7 +144,8 @@ def topic():
     data = request.get_json(force=True)
     result = topic.insert_one({
        "name": "abc",
-       "description": "fhjgfgjhgefj"
+       "description": "fhjgfgjhgefj",
+       "slug": ["user_id", "heading", "author", "timestamps"]
     })
     print(result.inserted_id)
     return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
@@ -149,6 +157,7 @@ def city():
     data = request.get_json(force=True)
     result = city.insert_one({
        "name": "abc",
+       "slug": "jkfg"
     })
     print(result.inserted_id)
     return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
