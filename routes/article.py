@@ -157,7 +157,7 @@ def city():
     data = request.get_json(force=True)
     result = city.insert_one({
        "name": "abc",
-       "slug": "jkfg"
+       "slug": ["user_id", "heading", "author", "timestamps"]
     })
     print(result.inserted_id)
     return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
