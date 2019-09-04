@@ -9,6 +9,7 @@ import datetime
 from bson.json_util import ObjectId
 import jwt
 import cloudinary as Cloud
+from cloudinary import uploader
 # print(datetime.datetime.now())
 
 
@@ -19,9 +20,9 @@ app.config['MONGO_DBNAME'] = os.getenv('MONGO_DBNAME')
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 # connect(os.getenv('MONGO_DBNAME'), host=os.getenv('MONGO_URI'), port=11968, username='mansoor', password='mansoor11', retryWrites=False)
 Cloud.config.update = ({
-    'cloud_name':os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    'api_key': os.environ.get('CLOUDINARY_API_KEY'),
-    'api_secret': os.environ.get('CLOUDINARY_API_SECRET')
+    'cloud_name':os.getenv('CLOUDINARY_CLOUD_NAME'),
+    'api_key': os.getenv('CLOUDINARY_API_KEY'),
+    'api_secret': os.getenv('CLOUDINARY_API_SECRET')
 })
 
 # class Article(Document):
@@ -59,9 +60,10 @@ mongo = PyMongo(app, retryWrites=False, connect= True )
 def index():
     api = mongo.db.article.find_one({'_id': ObjectId('5d6e715fce7b8f762204dc41') })
     encoded = jwt.encode({'some': 'payload'}, 'secretToken', algorithm='HS256')
+    pipeshelf = uploader.upload("v1.mp4", resource_type = "video", chunk_size = 1000000000)
     encoded = str(encoded).split("'")
-    print(api)
-    return jsonify({ "message" : "Wellcome To RESTFUL APIs Articles", "secretToken": encoded })
+    print(pipeshelf)
+    return jsonify({ "message" : "Wellcome To RESTFUL APIs Articles", "secretToken": encoded, "url": pipeshelf })
 
 
 @article_blueprint.route("/add", methods=["POST"])
@@ -72,7 +74,7 @@ def add():
     print(mongo.db.dropDatabase())
     result = article.insert_one(data)
     print('result', result.inserted_id)
-    return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
+    return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id) })
 
 
 @article_blueprint.route("/images", methods=["POST"])
