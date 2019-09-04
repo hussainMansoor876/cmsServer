@@ -8,6 +8,7 @@ from flask_cors import CORS, cross_origin
 import datetime
 from bson.json_util import ObjectId
 import jwt
+import cloudinary as Cloud
 # print(datetime.datetime.now())
 
 
@@ -17,7 +18,11 @@ app = Flask(__name__)
 app.config['MONGO_DBNAME'] = os.getenv('MONGO_DBNAME')
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 # connect(os.getenv('MONGO_DBNAME'), host=os.getenv('MONGO_URI'), port=11968, username='mansoor', password='mansoor11', retryWrites=False)
-
+Cloud.config.update = ({
+    'cloud_name':os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'api_key': os.environ.get('CLOUDINARY_API_KEY'),
+    'api_secret': os.environ.get('CLOUDINARY_API_SECRET')
+})
 
 # class Article(Document):
 #     email = StringField(required=True)
