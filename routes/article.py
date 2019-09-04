@@ -1,14 +1,13 @@
 from flask import Blueprint, Flask, jsonify, request, Response
 from flask_pymongo import PyMongo
 import os
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
 from dotenv import load_dotenv
 import json
 import bcrypt
 from flask_cors import CORS, cross_origin
 import datetime
 from bson.json_util import ObjectId
+import jwt
 # print(datetime.datetime.now())
 
 
@@ -43,6 +42,7 @@ mongo = PyMongo(app, retryWrites=False, connect= True )
 # "de_time": 7846874,
 # "timestamp": 9048094,
 # "last_modified": 37467,
+# "image_id": "dsudhuf",
 # "createdBy": "Mansoor"
 # }
 
@@ -50,8 +50,10 @@ mongo = PyMongo(app, retryWrites=False, connect= True )
 @article_blueprint.route("/")
 def index():
     api = mongo.db.article.find_one({'_id': ObjectId('5d6e715fce7b8f762204dc41') })
+    encoded = jwt.encode({'some': 'payload'}, 'secretToken', algorithm='HS256')
+    encoded = str(encoded).split("'")
     print(api)
-    return jsonify({ "message" : "Wellcome To RESTFUL APIs Articles" })
+    return jsonify({ "message" : "Wellcome To RESTFUL APIs Articles", "secretToken": encoded })
 
 
 @article_blueprint.route("/add", methods=["POST"])

@@ -1,8 +1,6 @@
 from flask import Blueprint, Flask, jsonify, request, Response
 from flask_pymongo import PyMongo
 import os
-from sendgrid import SendGridAPIClient
-from sendgrid.helpers.mail import Mail
 from dotenv import load_dotenv
 import json
 import bcrypt
