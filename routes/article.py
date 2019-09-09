@@ -86,8 +86,10 @@ def add():
         video_upload = uploader.upload(fileData['video'], resource_type = "video", chunk_size = 1000000000)
         video_result = {
             "video": video_upload,
-            "video_desc": data['video_']
+            "video_desc": data['video_desc'] if data['video_desc'] else None,
+            "timestamp": datetime.datetime.now()
         }
+    
     # print(mongo.db.dropDatabase())
     # result = article.insert_one(data)
     # print('result', result.inserted_id)
