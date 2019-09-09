@@ -10,7 +10,7 @@ from bson.json_util import ObjectId
 import jwt
 import cloudinary as Cloud
 from cloudinary import uploader
-# print(datetime.datetime.now())
+print(datetime.datetime.now())
 
 
 load_dotenv()
@@ -69,12 +69,29 @@ def index():
 @article_blueprint.route("/add", methods=["POST"])
 def add():
     article = mongo.db.article
-    data = request.get_json(force=True)
+    images = mongo.db.images
+    videos = mongo.db.videos
+    data = request.form
+    fileData = request.files
     print(mongo.db.list_collection_names())
-    print(mongo.db.dropDatabase())
-    result = article.insert_one(data)
-    print('result', result.inserted_id)
-    return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id) })
+    print(data)
+    print(fileData['image'])
+    image_upload = uploader.upload(fileData['image'])
+    image_result = {
+        "image": image_upload,
+        "image_desc": data['image_desc'],
+        "timestamp": datetime.datetime.now()
+    }
+    if(fileData['video']):
+        video_upload = uploader.upload(fileData['video'], resource_type = "video", chunk_size = 1000000000)
+        video_result = {
+            "video": video_upload,
+            "video_desc": data['video_']
+        }
+    # print(mongo.db.dropDatabase())
+    # result = article.insert_one(data)
+    # print('result', result.inserted_id)
+    return jsonify({ 'success': True, 'message': 'Successfully Registered', 'resulted_id': 'str(result.inserted_id)' })
 
 
 @article_blueprint.route("/images", methods=["POST"])
