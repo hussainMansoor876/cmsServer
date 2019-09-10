@@ -118,15 +118,13 @@ def image():
 @article_blueprint.route("/gallery", methods=["POST"])
 def gallery():
     gallery = mongo.db.gallery
-    data = request.get_json(force=True)
-    result = gallery.insert_one({
-        "name": "abc",
-        "imageIds": [],
-        "slug": "dsuhirtuyuighiuy",
-        "user_id": "dfsudhir"
-    })
-    print(result.inserted_id)
-    return jsonify({'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
+    data = request.form
+    gallery_data = {
+        "name": data['name'],
+        "image_id": []
+    }
+    gallery.insert_one(gallery_data)
+    return jsonify({'success': True, 'message': 'Successfully Added Gallery'})
 
 
 @article_blueprint.route("/video", methods=["POST"])
