@@ -164,14 +164,12 @@ def category():
 @article_blueprint.route("/topic", methods=["POST"])
 def topic():
     topic = mongo.db.topic
-    data = request.get_json(force=True)
-    result = topic.insert_one({
-        "name": "abc",
-        "description": "fhjgfgjhgefj",
-        "slug": ["user_id", "heading", "author", "timestamps"]
+    data = request.form
+    topic.insert_one({
+        "name": data['name'],
+        "description": data['description']
     })
-    print(result.inserted_id)
-    return jsonify({'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
+    return jsonify({'success': True, 'message': 'Successfully Registered'})
 
 
 @article_blueprint.route("/city", methods=["POST"])
