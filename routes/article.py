@@ -130,22 +130,25 @@ def gallery():
 @article_blueprint.route("/video", methods=["POST"])
 def video():
     video = mongo.db.video
-    data = request.get_json(force=True)
-    result = video.insert_one({
-        "filename": "abc",
-        "copyright": "Mansoor",
+    data = request.form
+    fileData = request.files
+
+    image_upload = uploader.upload(fileData['prev_image'])
+    video_upload = uploader.upload(fileData['video'], resource_type="video", chunk_size=1000000000)
+    video_data = {
+        "name": data['name'],
+        "copyright": data['copyright'],
         "headline": "fydgyudfguygvyuxgfy",
         "description": "nfjknjkdfkjf",
         "keywords": "jfhdfukd",
         "preview": "yfr",
         "free": True,
         "timestamps": datetime.datetime.now(),
-        "uploaded": "user",
-        "depublishing": "sgsgysy",
-        "user_id": "dfsudhir"
-    })
-    print(result.inserted_id)
-    return jsonify({'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
+        "userName": data['userName'],
+        "depublishing": data['depublishing'],
+        "uid": data['uid']
+    }
+    return jsonify({'success': True, 'message': 'Successfully Registered'})
 
 
 @article_blueprint.route("/category", methods=["POST"])
