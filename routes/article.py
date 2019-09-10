@@ -64,7 +64,7 @@ def add():
             fileData['video'], resource_type="video", chunk_size=1000000000)
         video_result = {
             "video": video_upload,
-            "video_desc": data['video_desc'],
+            "video_desc": data['video_desc'] if 'video_desc' in data else None,
             "timestamp": datetime.datetime.now()
         }
     article_data = {
