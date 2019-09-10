@@ -136,19 +136,19 @@ def video():
     image_upload = uploader.upload(fileData['prev_image'])
     video_upload = uploader.upload(fileData['video'], resource_type="video", chunk_size=1000000000)
     video_data = {
-        "name": data['name'],
         "copyright": data['copyright'],
-        "headline": "fydgyudfguygvyuxgfy",
-        "description": "nfjknjkdfkjf",
-        "keywords": "jfhdfukd",
-        "preview": "yfr",
-        "free": True,
+        "headline": data['headline'],
+        "video_desc": data['video_desc'],
+        "prev_image": image_upload,
+        "video": video_upload,
+        "free": data['free'],
         "timestamps": datetime.datetime.now(),
         "userName": data['userName'],
         "depublishing": data['depublishing'],
         "uid": data['uid']
     }
-    return jsonify({'success': True, 'message': 'Successfully Registered'})
+    video.insert_one(video_data)
+    return jsonify({'success': True, 'message': 'Successfully Uploaded'})
 
 
 @article_blueprint.route("/category", methods=["POST"])
