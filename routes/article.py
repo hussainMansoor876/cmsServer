@@ -34,7 +34,6 @@ mongo = PyMongo(app, retryWrites=False, connect=True)
 # print(mongo.db.image)
 
 
-
 @article_blueprint.route("/")
 def index():
     api = mongo.db.article.find_one(
@@ -92,7 +91,7 @@ def add():
     }
     article_added = article.insert_one(article_data)
     print(article_added.inserted_id)
-    return jsonify({'success': True, 'message': 'Successfully Registered' })
+    return jsonify({'success': True, 'message': 'Successfully Registered'})
 
 
 @article_blueprint.route("/images", methods=["POST"])
@@ -106,26 +105,44 @@ def image():
     print(str(gallery_result['_id']))
     if gallery_result:
         image_data = {
-        "copyright": data['copyright'],
-        "imageData": image_upload,
-        "image_desc": data['image_desc'],
-        "userName": data['userName'],
-        "uid": data['uid'],
-        "free": data['free'],
-        "symbol_image": data['symbol_image'],
-        "timestamp": datetime.datetime.now(),
-        "depublishing": data['depublishing'],
-        "gallery_name": data['gallery_name'],
-        "gallery_id": str(gallery_result['_id'])
-    }
+            "copyright": data['copyright'],
+            "imageData": image_upload,
+            "image_desc": data['image_desc'],
+            "userName": data['userName'],
+            "uid": data['uid'],
+            "free": data['free'],
+            "symbol_image": data['symbol_image'],
+            "timestamp": datetime.datetime.now(),
+            "depublishing": data['depublishing'],
+            "gallery_name": data['gallery_name'],
+            "gallery_id": str(gallery_result['_id'])
+        }
+        image_result = image.insert_one(image_data)
+        gallery_result['image_id'].append(image_result.inserted_id)
+        gallery.find_one_and_update({"name": data['gallery_name']}, {"image_id": gallery_result['image_id']})
     else:
         gallery_new = {
-            "name": data['name'],
+            "name": data['gallery_name'],
             "image_id": []
         }
         gallery_result = gallery.insert_one(gallery_new)
-    # image_added = image.insert_one(image_data)
-
+        image_data = {
+            "copyright": data['copyright'],
+            "imageData": image_upload,
+            "image_desc": data['image_desc'],
+            "userName": data['userName'],
+            "uid": data['uid'],
+            "free": data['free'],
+            "symbol_image": data['symbol_image'],
+            "timestamp": datetime.datetime.now(),
+            "depublishing": data['depublishing'],
+            "gallery_name": data['gallery_name'],
+            "gallery_id": str(gallery_result['_id'])
+        }
+        image_result = image.insert_one(image_data)
+        gallery_result['image_id'].append(image_result.inserted_id)
+        gallery.find_one_and_update({"name": data['gallery_name']}, {"image_id": gallery_result['image_id']})
+        
     return jsonify({'success': True, 'message': 'Successfully Uploaded'})
 
 
@@ -148,7 +165,8 @@ def video():
     fileData = request.files
 
     image_upload = uploader.upload(fileData['prev_image'])
-    video_upload = uploader.upload(fileData['video'], resource_type="video", chunk_size=1000000000)
+    video_upload = uploader.upload(
+        fileData['video'], resource_type="video", chunk_size=1000000000)
     video_data = {
         "copyright": data['copyright'],
         "headline": data['headline'],
