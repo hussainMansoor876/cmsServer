@@ -11,7 +11,6 @@ import jwt
 import cloudinary as Cloud
 from cloudinary import uploader
 # print(datetime.datetime.now())
-# print(mongo.db.list_collection_names())
 # print('result', result.inserted_id)
 
 
@@ -30,6 +29,9 @@ Cloud.config.update = ({
 
 article_blueprint = Blueprint('article', __name__)
 mongo = PyMongo(app, retryWrites=False, connect=True)
+
+# print(mongo.db.list_collection_names())
+# print(mongo.db.image)
 
 
 
@@ -96,10 +98,14 @@ def add():
 @article_blueprint.route("/images", methods=["POST"])
 def image():
     image = mongo.db.image
+    gallery = mongo.db.gallery
     data = request.form
     fileData = request.files
     image_upload = uploader.upload(fileData['image'])
-    image_data = {
+    gallery_result = gallery.find_one({"name": data['gallery_name']})
+    print(str(gallery_result['_id']))
+    if gallery_result:
+        image_data = {
         "copyright": data['copyright'],
         "imageData": image_upload,
         "image_desc": data['image_desc'],
@@ -109,9 +115,17 @@ def image():
         "symbol_image": data['symbol_image'],
         "timestamp": datetime.datetime.now(),
         "depublishing": data['depublishing'],
-        "gallery_id": data['gallery_id']
+        "gallery_name": data['gallery_name'],
+        "gallery_id": str(gallery_result['_id'])
     }
-    image.insert_one(image_data)
+    else:
+        gallery_new = {
+            "name": data['name'],
+            "image_id": []
+        }
+        gallery_result = gallery.insert_one(gallery_new)
+    # image_added = image.insert_one(image_data)
+
     return jsonify({'success': True, 'message': 'Successfully Uploaded'})
 
 
