@@ -102,7 +102,6 @@ def image():
     fileData = request.files
     image_upload = uploader.upload(fileData['image'])
     gallery_result = gallery.find_one({"name": data['gallery_name']})
-    print(str(gallery_result['_id']))
     if gallery_result:
         image_data = {
             "copyright": data['copyright'],
@@ -118,8 +117,8 @@ def image():
             "gallery_id": str(gallery_result['_id'])
         }
         image_result = image.insert_one(image_data)
-        gallery_result['image_id'].append(image_result.inserted_id)
-        gallery.find_one_and_update({"name": data['gallery_name']}, {"image_id": gallery_result['image_id']})
+        gallery_result['image_id'].append(str(image_result.inserted_id))
+        gallery.find_one_and_update({"name": data['gallery_name']}, {"$set": {"image_id": gallery_result['image_id']}})
     else:
         gallery_new = {
             "name": data['gallery_name'],
@@ -137,11 +136,11 @@ def image():
             "timestamp": datetime.datetime.now(),
             "depublishing": data['depublishing'],
             "gallery_name": data['gallery_name'],
-            "gallery_id": str(gallery_result['_id'])
+            "gallery_id": str(gallery_result.inserted_id)
         }
         image_result = image.insert_one(image_data)
-        gallery_result['image_id'].append(image_result.inserted_id)
-        gallery.find_one_and_update({"name": data['gallery_name']}, {"image_id": gallery_result['image_id']})
+        gallery_new['image_id'].append(str(image_result.inserted_id))
+        gallery.find_one_and_update({"name": data['gallery_name']}, {"$set": {"image_id": gallery_new['image_id']}})
         
     return jsonify({'success': True, 'message': 'Successfully Uploaded'})
 
