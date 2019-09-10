@@ -89,27 +89,30 @@ def add():
         "status": data['status']
     }
     article_added = article.insert_one(article_data)
+    print(article_added.inserted_id)
     return jsonify({'success': True, 'message': 'Successfully Registered' })
 
 
 @article_blueprint.route("/images", methods=["POST"])
 def image():
     image = mongo.db.image
-    data = request.get_json(force=True)
-    result = image.insert_one({
-        "filename": "abc",
-        "copyright": "Mansoor",
-        "description": "nfjknjkdfkjf",
-        "keywords": "jfhdfukd",
-        "symbol": True,
-        "free": True,
-        "timestamps": datetime.datetime.now(),
-        "uploaded": "user",
-        "depublishing": "sgsgysy",
-        "user_id": "dfsudhir"
-    })
-    print(result.inserted_id)
-    return jsonify({'success': True, 'message': 'Successfully Registered', 'resulted_id': str(result.inserted_id)})
+    data = request.form
+    fileData = request.files
+    image_upload = uploader.upload(fileData['image'])
+    image_data = {
+        "copyright": data['copyright'],
+        "imageData": image_upload,
+        "image_desc": data['image_desc'],
+        "userName": data['userName'],
+        "uid": data['uid'],
+        "free": data['free'],
+        "symbol_image": data['symbol_image'],
+        "timestamp": datetime.datetime.now(),
+        "depublishing": data['depublishing'],
+        "gallery_id": data['gallery_id']
+    }
+    image.insert_one(image_data)
+    return jsonify({'success': True, 'message': 'Successfully Uploaded'})
 
 
 @article_blueprint.route("/gallery", methods=["POST"])
