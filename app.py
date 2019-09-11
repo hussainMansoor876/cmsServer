@@ -10,7 +10,7 @@ import os
 load_dotenv()
 
 from flask_cors import CORS, cross_origin
-from routes import login, article
+from routes import login, article, get
 
 app = Flask(__name__)
 
@@ -22,6 +22,7 @@ CORS(app, origins = ["http://localhost:3000", "https://quiz-assignment-8e887.fir
 
 app.register_blueprint(login.index_blueprint, url_prefix='/login')
 app.register_blueprint(article.article_blueprint, url_prefix='/article')
+app.register_blueprint(get.get_blueprint, url_prefix='/get')
 
 @app.route('/')
 def index():

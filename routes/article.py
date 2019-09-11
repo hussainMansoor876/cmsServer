@@ -85,7 +85,7 @@ def add():
         "imageData": image_result,
         "videoData": video_result,
         "createdBy": data['userName'],
-        "user_id": data['uid'],
+        "uid": data['uid'],
         "slug": data['slug'],
         "status": data['status']
     }
