@@ -153,7 +153,7 @@ def cityGet():
 def articlePage(city, number):
     number = int(number) * 10
     article = mongo.db.article
-    article_data = article.find({"city": city.title()})
+    article_data = article.find({"city": city.title()}).sort("timestamp", -1)
     data = []
     for x in article_data:
         x['_id'] = str(x['_id'])
