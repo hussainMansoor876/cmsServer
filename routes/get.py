@@ -123,13 +123,23 @@ def categoryGet():
     return jsonify({'data': data})
 
 
-# @get_blueprint.route("/topic")
-# def topicGet():
-#     topic = mongo.db.topic
-#     return jsonify({'success': True, 'message': 'Successfully Registered'})
+@get_blueprint.route("/topic/all")
+def topicGet():
+    topic = mongo.db.topic
+    topic_data = topic.find({})
+    data = []
+    for x in topic_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data})
 
 
-# @get_blueprint.route("/city")
-# def cityGet():
-#     city = mongo.db.city
-#     return jsonify({'success': True, 'message': 'Successfully Registered'})
+@get_blueprint.route("/city/all")
+def cityGet():
+    city = mongo.db.city
+    city_data = city.find({})
+    data = []
+    for x in city_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data})
