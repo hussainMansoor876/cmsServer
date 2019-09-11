@@ -71,9 +71,24 @@ def imageGetAll():
 
 
 @get_blueprint.route("/gallery/<id>")
-def galleryGet():
+def galleryGet(id):
     gallery = mongo.db.gallery
-    return jsonify({'success': True, 'message': 'Successfully Added Gallery'})
+    gallery_data = gallery.find({"uid": id})
+    data = []
+    for x in gallery_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data})
+
+@get_blueprint.route("/gallery/all")
+def galleryGetAll():
+    gallery = mongo.db.gallery
+    gallery_data = gallery.find({})
+    data = []
+    for x in gallery_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data})
 
 
 # @get_blueprint.route("/video")

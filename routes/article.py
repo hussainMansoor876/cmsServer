@@ -152,7 +152,7 @@ def gallery():
     data = request.form
     gallery_data = {
         "name": data['name'],
-        "uid": data['uid']
+        "uid": data['uid'],
         "image_id": []
     }
     gallery.insert_one(gallery_data)
