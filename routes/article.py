@@ -94,7 +94,7 @@ def add():
     return jsonify({'success': True, 'message': 'Successfully Registered'})
 
 
-@article_blueprint.route("/images", methods=["POST"])
+@article_blueprint.route("/image", methods=["POST"])
 def image():
     image = mongo.db.image
     gallery = mongo.db.gallery
