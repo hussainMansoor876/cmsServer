@@ -10,6 +10,8 @@ from bson.json_util import ObjectId
 import jwt
 import cloudinary as Cloud
 from cloudinary import uploader
+import datetime
+# print(datetime.date.today())
 # print(datetime.datetime.now())
 # print('result', result.inserted_id)
 
@@ -73,15 +75,15 @@ def add():
         "subheadline": data['subheadline'],
         "text": data['text'],
         "author": data['author'],
-        "city": data['city'],
+        "city": data['city'].title(),
         "categories": data['categories'],
         "topics": data['topics'],
         "gNews": data['gNews'],
-        "mark": data['mark'],
+        "free": data['free'],
         "publishing": data['publishing'],
         "depublishing": data['depublishing'],
         "timestamp": datetime.datetime.now(),
-        "last_modified": data['last_modified'],
+        "last_modified": datetime.datetime.now(),
         "imageData": image_result,
         "videoData": video_result,
         "createdBy": data['userName'],
