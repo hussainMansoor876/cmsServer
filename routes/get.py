@@ -148,3 +148,13 @@ def cityGet():
         x['_id'] = str(x['_id'])
         data.append(x)
     return jsonify({'data': data})
+
+@get_blueprint.route("/article/<city>/<number>")
+def articlePage(city, number):
+    article = mongo.db.article
+    article_data = article.find({"uid": id})
+    data = []
+    for x in article_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data})

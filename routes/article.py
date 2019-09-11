@@ -69,7 +69,7 @@ def add():
             "timestamp": datetime.datetime.now()
         }
     article_data = {
-        "heading": data['heading'],
+        "headline": data['headline'],
         "subheadline": data['subheadline'],
         "text": data['text'],
         "author": data['author'],
