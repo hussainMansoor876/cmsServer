@@ -83,10 +83,15 @@ def galleryGet(id):
 @get_blueprint.route("/gallery/all")
 def galleryGetAll():
     gallery = mongo.db.gallery
+    image = mongo.db.image
     gallery_data = gallery.find({})
     data = []
     for x in gallery_data:
         x['_id'] = str(x['_id'])
+        for i, v in enumerate(x['image_id']):
+            image_data = image.find_one({'_id': ObjectId(v)})
+            image_data['_id'] = str(image_data['_id'])
+            x['image_id'][i] = image_data
         data.append(x)
     return jsonify({'data': data})
 
