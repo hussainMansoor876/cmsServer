@@ -122,7 +122,8 @@ def image():
     else:
         gallery_new = {
             "name": data['gallery_name'],
-            "image_id": []
+            "image_id": [],
+            "uid": data['uid']
         }
         gallery_result = gallery.insert_one(gallery_new)
         image_data = {
@@ -151,6 +152,7 @@ def gallery():
     data = request.form
     gallery_data = {
         "name": data['name'],
+        "uid": data['uid']
         "image_id": []
     }
     gallery.insert_one(gallery_data)

@@ -70,10 +70,10 @@ def imageGetAll():
     return jsonify({'data': data})
 
 
-# @get_blueprint.route("/gallery")
-# def galleryGet():
-#     gallery = mongo.db.gallery
-#     return jsonify({'success': True, 'message': 'Successfully Added Gallery'})
+@get_blueprint.route("/gallery/<id>")
+def galleryGet():
+    gallery = mongo.db.gallery
+    return jsonify({'success': True, 'message': 'Successfully Added Gallery'})
 
 
 # @get_blueprint.route("/video")
