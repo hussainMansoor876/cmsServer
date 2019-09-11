@@ -101,6 +101,16 @@ def videoGet(id):
         data.append(x)
     return jsonify({'data': data})
 
+@get_blueprint.route("/video/all")
+def videoGetAll():
+    video = mongo.db.video
+    video_data = video.find({})
+    data = []
+    for x in video_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data})
+
 
 # @get_blueprint.route("/category")
 # def categoryGet():
