@@ -28,3 +28,11 @@ Cloud.config.update = ({
 update_blueprint = Blueprint('update', __name__)
 mongo = PyMongo(app, retryWrites=False, connect=True)
 
+
+@update_blueprint.route("/image", methods=["POST"])
+def imageUpdate():
+    image = mongo.db.image
+    data = request.form
+    image.find_one_and_update({"_id": data['_id']}, {"$set": {"copyright": data['copyright']}})
+    return jsonify({'success': True, 'message': 'Successfully Updated'})
+
