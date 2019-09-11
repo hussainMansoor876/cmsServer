@@ -91,10 +91,15 @@ def galleryGetAll():
     return jsonify({'data': data})
 
 
-# @get_blueprint.route("/video")
-# def videoGet():
-#     video = mongo.db.video
-#     return jsonify({'success': True, 'message': 'Successfully Uploaded'})
+@get_blueprint.route("/video/<id>")
+def videoGet(id):
+    video = mongo.db.video
+    video_data = video.find({"uid": id})
+    data = []
+    for x in video_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data})
 
 
 # @get_blueprint.route("/category")
