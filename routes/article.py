@@ -211,10 +211,13 @@ def category():
 def topic():
     topic = mongo.db.topic
     data = request.form
-    topic.insert_one({
+    slug = slugify(data['name'])
+    topic_added = topic.insert_one({
         "name": data['name'],
         "description": data['description']
     })
+    slug = str(topic_added.inserted_id)+"/"+slug
+    topic.find_one_and_update({"_id": topic_added.inserted_id}, {"$set": {"slug": slug}})
     return jsonify({'success': True, 'message': 'Successfully Registered'})
 
 
