@@ -171,11 +171,11 @@ def articlePageCity(city):
         data.append(x)
     return jsonify({'data': data})
 
-@get_blueprint.route("/article/<number>")
-def articlePageAll(city, number):
+@get_blueprint.route("/article/get/<number>")
+def articlePageAll(number):
     number = int(number) * 10
     article = mongo.db.article
-    article_data = article.find({"city": city.title()}).sort("timestamp", -1)
+    article_data = article.find().sort("timestamp", -1)
     data = []
     for x in article_data:
         x['_id'] = str(x['_id'])
