@@ -109,7 +109,7 @@ def videoGet(id):
 @get_blueprint.route("/video/all")
 def videoGetAll():
     video = mongo.db.video
-    video_data = video.find({})
+    video_data = video.find({}).sort("timestamp", -1)
     data = []
     for x in video_data:
         x['_id'] = str(x['_id'])
@@ -142,7 +142,7 @@ def topicGet():
 @get_blueprint.route("/city/all")
 def cityGet():
     city = mongo.db.city
-    city_data = city.find({})
+    city_data = city.find({}).sort("name")
     data = []
     for x in city_data:
         x['_id'] = str(x['_id'])
@@ -192,28 +192,28 @@ def articlePageAllTimestamp():
         data.append(x)
     return jsonify({'data': data})
 
-@get_blueprint.route("/cat/<categories>/<number>")
+@get_blueprint.route("/sortCat/<categories>/<number>")
 def articlePageCat(categories, number):
     number = int(number) * 10
     article = mongo.db.article
-    article_data = article.find({"categories": categories.title() or categories.lower() or categories.upper()}).sort("timestamp", -1)
+    article_data = article.find({"categories": categories}).sort("timestamp", -1)
     data = []
     for x in article_data:
         x['_id'] = str(x['_id'])
         data.append(x)
     return jsonify({'data': data[number-10:number]})
 
-@get_blueprint.route("/getCategory/<categories>")
+@get_blueprint.route("/sortCat/<categories>")
 def getCatAllData(categories):
     article = mongo.db.article
-    article_data = article.find({"categories": categories.title() or categories.lower() or categories.upper()}).sort("timestamp", -1)
+    article_data = article.find({"categories": categories}).sort("timestamp", -1)
     data = []
     for x in article_data:
         x['_id'] = str(x['_id'])
         data.append(x)
     return jsonify({'data': data})
 
-@get_blueprint.route("/getTopics/<topics>")
+@get_blueprint.route("/sortTopics/<topics>")
 def getTopics(topics):
     article = mongo.db.article
     article_data = article.find({"topics": topics.title() or topics.lower() or topics.upper()}).sort("timestamp", -1)
@@ -233,3 +233,54 @@ def getTopicsPag(topics, number):
         x['_id'] = str(x['_id'])
         data.append(x)
     return jsonify({'data': data[number-10:number]})
+
+
+    # Routes For cities, categories, topics, videos, gallery id
+
+
+@get_blueprint.route("/video/page/<number>")
+def videoGetPage(number):
+    video = mongo.db.video
+    number = int(number) * 10
+    video_data = video.find({}).sort("timestamp", -1)
+    data = []
+    for x in video_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data[number-10:number]})
+
+
+@get_blueprint.route("/category/<number>")
+def categoryGetPage(number):
+    category = mongo.db.category
+    number = int(number) * 10
+    category_data = category.find({})
+    data = []
+    for x in category_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data})
+
+
+@get_blueprint.route("/topic/<number>")
+def topicGetPage(number):
+    topic = mongo.db.topic
+    number = int(number) * 10
+    topic_data = topic.find({})
+    data = []
+    for x in topic_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data})
+
+
+@get_blueprint.route("/city/<number>")
+def cityGetPage(number):
+    city = mongo.db.city
+    number = int(number) * 10
+    city_data = city.find({}).sort("name")
+    data = []
+    for x in city_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data})
