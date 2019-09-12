@@ -10,6 +10,7 @@ from bson.json_util import ObjectId
 import jwt
 import cloudinary as Cloud
 from cloudinary import uploader
+from pymongo import ReturnDocument
 
 
 load_dotenv()
@@ -35,8 +36,11 @@ def imageUpdate():
     data = request.form
     data = dict(data)
     data['_id'] = ObjectId(data['_id'])
-    image.find_one_and_update({"_id": data['_id']}, {"$set": data})
-    return jsonify({'success': True, 'message': 'Successfully Updated'})
+    image_status = image.find_one_and_update({"_id": data['_id'], "uid": data['uid']}, {"$set": data}, return_document=ReturnDocument.AFTER)
+    print(image_status)
+    if image_status:
+        return jsonify({'success': True, 'message': 'Successfully Updated'})
+    return jsonify({'success': False, 'message': 'Cannot update Image Data'})
 
 @update_blueprint.route("/video", methods=["POST"])
 def videoUpdate():
@@ -44,6 +48,9 @@ def videoUpdate():
     data = request.form
     data = dict(data)
     data['_id'] = ObjectId(data['_id'])
-    video.find_one_and_update({"_id": ObjectId(data['_id'])}, {"$set": data})
-    return jsonify({'success': True, 'message': 'Successfully Updated'})
+    video_status = video.find_one_and_update({"_id": data['_id'], "uid": data['uid']}, {"$set": data}, return_document=ReturnDocument.AFTER)
+    if video_status:
+        return jsonify({'success': True, 'message': 'Successfully Updated'})
+    return jsonify({'success': False, 'message': 'Cannot update Video Data'})
+
 
