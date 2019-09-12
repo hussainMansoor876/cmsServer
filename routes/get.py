@@ -153,7 +153,7 @@ def cityGet():
 def articlePage(city, number):
     number = int(number) * 10
     article = mongo.db.article
-    article_data = article.find({"city": city.title()}).sort("timestamp", -1)
+    article_data = article.find({"city": city.title() or city.lower() or city.upper()}).sort("timestamp", -1)
     data = []
     for x in article_data:
         x['_id'] = str(x['_id'])
@@ -164,7 +164,7 @@ def articlePage(city, number):
 def articlePageCity(city):
     article = mongo.db.article
     print(city)
-    article_data = article.find({"city": city.title()}).sort("timestamp", -1)
+    article_data = article.find({"city": city.title() or city.lower() or city.upper()}).sort("timestamp", -1)
     data = []
     for x in article_data:
         x['_id'] = str(x['_id'])
@@ -196,8 +196,38 @@ def articlePageAllTimestamp():
 def articlePageCat(categories, number):
     number = int(number) * 10
     article = mongo.db.article
-    print(categories)
-    article_data = article.find({"categories": categories}).sort("timestamp", -1)
+    article_data = article.find({"categories": categories.title() or categories.lower() or categories.upper()}).sort("timestamp", -1)
+    data = []
+    for x in article_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data[number-10:number]})
+
+@get_blueprint.route("/getCategory/<categories>")
+def getCatAllData(categories):
+    article = mongo.db.article
+    article_data = article.find({"categories": categories.title() or categories.lower() or categories.upper()}).sort("timestamp", -1)
+    data = []
+    for x in article_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data})
+
+@get_blueprint.route("/getTopics/<topics>")
+def getTopics(topics):
+    article = mongo.db.article
+    article_data = article.find({"topics": topics.title() or topics.lower() or topics.upper()}).sort("timestamp", -1)
+    data = []
+    for x in article_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data})
+
+@get_blueprint.route("/getTopics/<topics>/<number>")
+def getTopicsPag(topics, number):
+    number = int(number) * 10
+    article = mongo.db.article
+    article_data = article.find({"topics": topics.title() or topics.lower() or topics.upper()}).sort("timestamp", -1)
     data = []
     for x in article_data:
         x['_id'] = str(x['_id'])
