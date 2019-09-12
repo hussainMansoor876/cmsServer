@@ -160,6 +160,17 @@ def articlePage(city, number):
         data.append(x)
     return jsonify({'data': data[number-10:number]})
 
+@get_blueprint.route("/article/getCity/<city>")
+def articlePageCity(city):
+    article = mongo.db.article
+    print(city)
+    article_data = article.find({"city": city.title()}).sort("timestamp", -1)
+    data = []
+    for x in article_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data})
+
 @get_blueprint.route("/article/<number>")
 def articlePageAll(city, number):
     number = int(number) * 10
@@ -170,6 +181,16 @@ def articlePageAll(city, number):
         x['_id'] = str(x['_id'])
         data.append(x)
     return jsonify({'data': data[number-10:number]})
+
+@get_blueprint.route("/article/getAll")
+def articlePageAllTimestamp():
+    article = mongo.db.article
+    article_data = article.find().sort("timestamp", -1)
+    data = []
+    for x in article_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data})
 
 @get_blueprint.route("/cat/<categories>/<number>")
 def articlePageCat(categories, number):
