@@ -11,6 +11,7 @@ import jwt
 import cloudinary as Cloud
 from cloudinary import uploader
 import datetime
+from slugify import slugify
 # print(datetime.date.today())
 # print(datetime.datetime.now())
 # print('result', result.inserted_id)
@@ -54,7 +55,7 @@ def add():
 
     data = request.form
     fileData = request.files
-
+    slug = slugify(data['headline'])
     image_upload = uploader.upload(fileData['image'])
     image_result = {
         "image": image_upload,
@@ -88,11 +89,13 @@ def add():
         "videoData": video_result,
         "createdBy": data['userName'],
         "uid": data['uid'],
-        "slug": data['slug'],
+        "slug": slug,
         "status": data['status']
     }
     article_added = article.insert_one(article_data)
     print(article_added.inserted_id)
+    slug = str(article_added.inserted_id)+"/"+slug
+    article.find_one_and_update({"_id": article_added.inserted_id}, {"$set": {"slug": slug}})
     return jsonify({'success': True, 'message': 'Successfully Registered'})
 
 
