@@ -125,10 +125,12 @@ def image():
         gallery_result['image_id'].append(str(image_result.inserted_id))
         gallery.find_one_and_update({"name": data['gallery_name']}, {"$set": {"image_id": gallery_result['image_id']}})
     else:
+        slug = slugify(data['gallery_name'])
         gallery_new = {
             "name": data['gallery_name'],
             "image_id": [],
-            "uid": data['uid']
+            "uid": data['uid'],
+            "slug": slug
         }
         gallery_result = gallery.insert_one(gallery_new)
         image_data = {
@@ -144,6 +146,8 @@ def image():
             "gallery_name": data['gallery_name'],
             "gallery_id": str(gallery_result.inserted_id)
         }
+        slug = str(gallery_result.inserted_id)+"/"+slug
+        gallery.find_one_and_update({"_id": gallery_result.inserted_id}, {"$set": {"slug": slug}})
         image_result = image.insert_one(image_data)
         gallery_new['image_id'].append(str(image_result.inserted_id))
         gallery.find_one_and_update({"name": data['gallery_name']}, {"$set": {"image_id": gallery_new['image_id']}})
