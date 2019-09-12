@@ -225,10 +225,13 @@ def topic():
 def city():
     city = mongo.db.city
     data = request.form
+    slug = slugify(data['name'])
     city_data = city.find_one({"name": data['name'].title()})
     if city_data:
         return jsonify({'success': False, 'message': 'Already city added'})
-    city.insert_one({
+    city_added = city.insert_one({
         "name": data['name'].title()
     })
+    slug = str(city_added.inserted_id)+"/"+slug
+    city.find_one_and_update({"_id": city_added.inserted_id}, {"$set": {"slug": slug}})
     return jsonify({'success': True, 'message': 'Successfully Registered'})
