@@ -155,12 +155,16 @@ def image():
 def gallery():
     gallery = mongo.db.gallery
     data = request.form
+    slug = slugify(data['name'])
     gallery_data = {
         "name": data['name'],
         "uid": data['uid'],
+        "slug": slug,
         "image_id": []
     }
-    gallery.insert_one(gallery_data)
+    gallery_added = gallery.insert_one(gallery_data)
+    slug = str(gallery_added.inserted_id)+"/"+slug
+    gallery.find_one_and_update({"_id": gallery_added.inserted_id}, {"$set": {"slug": slug}})
     return jsonify({'success': True, 'message': 'Successfully Added Gallery'})
 
 
