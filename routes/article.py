@@ -197,9 +197,13 @@ def video():
 def category():
     category = mongo.db.category
     data = request.form
-    category.insert_one({
-        "name": data['name']
+    slug = slugify(data['name'])
+    category_added = category.insert_one({
+        "name": data['name'],
+        "slug": slug
     })
+    slug = str(category_added.inserted_id)+"/"+slug
+    category.find_one_and_update({"_id": category_added.inserted_id}, {"$set": {"slug": slug}})
     return jsonify({'success': True, 'message': 'Successfully Added'})
 
 
