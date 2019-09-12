@@ -259,7 +259,7 @@ def categoryGetPage(number):
     for x in category_data:
         x['_id'] = str(x['_id'])
         data.append(x)
-    return jsonify({'data': data})
+    return jsonify({'data': data[number-10:number]})
 
 
 @get_blueprint.route("/topic/<number>")
@@ -271,7 +271,7 @@ def topicGetPage(number):
     for x in topic_data:
         x['_id'] = str(x['_id'])
         data.append(x)
-    return jsonify({'data': data})
+    return jsonify({'data': data[number-10:number]})
 
 
 @get_blueprint.route("/city/<number>")
@@ -283,4 +283,4 @@ def cityGetPage(number):
     for x in city_data:
         x['_id'] = str(x['_id'])
         data.append(x)
-    return jsonify({'data': data})
+    return jsonify({'data': data[number-10:number]})
