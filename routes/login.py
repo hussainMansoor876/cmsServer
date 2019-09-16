@@ -26,10 +26,10 @@ Cloud.config.update = ({
 })
 
 
-@index_blueprint.route("/", methods=["POST"])
+@index_blueprint.route("/signin", methods=["POST"])
 def signin():
     add = mongo.db.user
-    data = request.get_json(force=True)
+    data = request.form
     existUser = add.find_one({'email': data['email']})
     if(existUser):
         passwordCheck=bcrypt.checkpw(data['password'].encode('utf8'), existUser['password'])
