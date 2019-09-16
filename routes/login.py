@@ -29,12 +29,12 @@ Cloud.config.update = ({
 @index_blueprint.route("/signin", methods=["POST"])
 def signin():
     add = mongo.db.user
-    data = request.form
+    data = request.get_json(force=True)
     existUser = add.find_one({'email': data['email']})
     if(existUser):
         passwordCheck=bcrypt.checkpw(data['password'].encode('utf8'), existUser['password'])
         if(passwordCheck):
-            return jsonify({'success': True, 'message': 'User Find!!!', 'email': data['email']})
+            return jsonify({'success': True, 'message': 'User Find!!!'})
         else:
             return jsonify({'success': False, 'message': 'Invalid Email Or Password!!!'})
     else:
@@ -63,4 +63,4 @@ def registerUser():
             'secretToken': encoded[1],
             'role': 'Admin'
             })
-        return jsonify({ 'success': True, 'message': 'Successfully Registered', 'name': data['name'], 'email': data['email'], 'avatar': avatar })
+        return jsonify({ 'success': True, 'message': 'Successfully Registered', "secretToken": 'encoded', 'email': data['email'], 'name': data['name'] })
