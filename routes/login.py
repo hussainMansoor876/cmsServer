@@ -26,7 +26,7 @@ Cloud.config.update = ({
 })
 
 
-@index_blueprint.route("/signin", methods=["POST"])
+@index_blueprint.route("/", methods=["POST"])
 def signin():
     add = mongo.db.user
     data = request.get_json(force=True)
