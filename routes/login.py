@@ -63,4 +63,4 @@ def registerUser():
             'secretToken': encoded[1],
             'role': 'Admin'
             })
-        return jsonify({ 'success': True, 'message': 'Successfully Registered', "secretToken": 'encoded' })
+        return jsonify({ 'success': True, 'message': 'Successfully Registered', 'name': data['name'], 'email': data['email'], 'avatar': avatar })
