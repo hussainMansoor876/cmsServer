@@ -18,7 +18,7 @@ app.config['MONGO_DBNAME'] = os.getenv('MONGO_DBNAME')
 app.config['MONGO_URI'] = os.getenv('MONGO_URI')
 mongo = PyMongo(app, retryWrites=False)
 
-CORS(app, origins = ["http://localhost:3000", "https://quiz-assignment-8e887.firebaseapp.com/"], allow_headers = ["Content-Type", "Authorization", "Access-Control-Allow-Credentials"], supports_credentials=True)
+CORS(app, origins = ["http://localhost:3000", "https://quiz-assignment-8e887.firebaseapp.com/", "https://cms-user.herokuapp.com/"], allow_headers = ["Content-Type", "Authorization", "Access-Control-Allow-Credentials"], supports_credentials=True)
 
 app.register_blueprint(login.index_blueprint, url_prefix='/login')
 app.register_blueprint(article.article_blueprint, url_prefix='/article')
