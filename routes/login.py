@@ -34,7 +34,7 @@ def signin():
     if(existUser):
         passwordCheck=bcrypt.checkpw(data['password'].encode('utf8'), existUser['password'])
         if(passwordCheck):
-            return jsonify({'success': True, 'message': 'User Find!!!', 'email': data['email'], 'name': existUser['name']})
+            return jsonify({'success': True, 'message': 'User Find!!!', 'email': data['email'], 'name': existUser['name'], 'uid': str(existUser['_id'])})
         else:
             return jsonify({'success': False, 'message': 'Invalid Email Or Password!!!'})
     else:
@@ -55,7 +55,7 @@ def registerUser():
         hashed_password = bcrypt.hashpw(data['password'].encode('utf8'), bcrypt.gensalt(12))
         encoded = jwt.encode(data, 'secretToken', algorithm='HS256')
         encoded = str(encoded).split("'")
-        add.insert_one({ 
+        add_data = add.insert_one({ 
             'name': data['name'], 
             'email': data['email'], 
             'password': hashed_password,
@@ -63,4 +63,4 @@ def registerUser():
             'secretToken': encoded[1],
             'role': 'Admin'
             })
-        return jsonify({ 'success': True, 'message': 'Successfully Registered', "secretToken": 'encoded', 'email': data['email'], 'name': data['name'] })
+        return jsonify({ 'success': True, 'message': 'Successfully Registered', "secretToken": 'encoded', 'email': data['email'], 'name': data['name'], 'uid': str(add_data.inserted_id) })
