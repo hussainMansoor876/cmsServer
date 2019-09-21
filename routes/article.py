@@ -54,6 +54,8 @@ def add():
     article = mongo.db.article
 
     data = request.form
+    data = dict(data)
+    print(data)
     fileData = request.files
     slug = slugify(data['headline'])
     image_upload = uploader.upload(fileData['image'])
@@ -75,14 +77,14 @@ def add():
         "headline": data['headline'],
         "subheadline": data['subheadline'],
         "text": data['text'],
-        "author": data['author'],
-        "city": data['city'].title(),
-        "categories": data['categories'],
-        "topics": data['topics'],
-        "gNews": data['gNews'],
+        "author": json.loads(data['author']),
+        "city": json.loads(data['city'].title()),
+        "categories": json.loads(data['categories']),
+        "topics": json.loads(data['topics']),
+        "gNews": json.loads(data['gNews']),
         "free": data['free'],
-        "publishing": data['publishing'],
-        "depublishing": data['depublishing'],
+        "publishing": datetime.datetime.strptime(data['publishing'], "%Y-%m-%d %H:%M:%S"),
+        "depublishing": datetime.datetime.strptime(data['depublishing'], "%Y-%m-%d %H:%M:%S"),
         "timestamp": datetime.datetime.now(),
         "last_modified": datetime.datetime.now(),
         "imageData": image_result,
