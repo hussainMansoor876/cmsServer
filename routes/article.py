@@ -55,7 +55,6 @@ def add():
 
     data = request.form
     data = dict(data)
-    print(data)
     fileData = request.files
     slug = slugify(data['headline'])
     image_upload = uploader.upload(fileData['image'])
@@ -73,15 +72,25 @@ def add():
             "video_desc": data['video_desc'] if 'video_desc' in data else None,
             "timestamp": datetime.datetime.now()
         }
+    arrData = {
+        'city': json.loads(data['city']),
+        'author': json.loads(data['author']),
+        'categories': json.loads(data['categories']),
+        'topics': json.loads(data['topics']),
+        'gNews': json.loads(data['gNews']),
+    }
+    for key, value in arrData.items():
+        for i, val in enumerate(value):
+            arrData[key][i] = val.title()
     article_data = {
         "headline": data['headline'],
         "subheadline": data['subheadline'],
         "text": data['text'],
-        "author": json.loads(data['author']),
-        "city": json.loads(data['city'].title()),
-        "categories": json.loads(data['categories']),
-        "topics": json.loads(data['topics']),
-        "gNews": json.loads(data['gNews']),
+        "author": arrData['author'],
+        "city": arrData['city'],
+        "categories": arrData['categories'],
+        "topics": arrData['topics'],
+        "gNews": arrData['gNews'],
         "free": data['free'],
         "publishing": datetime.datetime.strptime(data['publishing'], "%Y-%m-%d %H:%M:%S"),
         "depublishing": datetime.datetime.strptime(data['depublishing'], "%Y-%m-%d %H:%M:%S"),
@@ -97,7 +106,8 @@ def add():
     article_added = article.insert_one(article_data)
     print(article_added.inserted_id)
     slug = str(article_added.inserted_id)+"/"+slug
-    article.find_one_and_update({"_id": article_added.inserted_id}, {"$set": {"slug": slug}})
+    article.find_one_and_update({"_id": article_added.inserted_id}, {
+                                "$set": {"slug": slug}})
     return jsonify({'success': True, 'message': 'Successfully Registered'})
 
 
@@ -125,7 +135,8 @@ def image():
         }
         image_result = image.insert_one(image_data)
         gallery_result['image_id'].append(str(image_result.inserted_id))
-        gallery.find_one_and_update({"name": data['gallery_name']}, {"$set": {"image_id": gallery_result['image_id']}})
+        gallery.find_one_and_update({"name": data['gallery_name']}, {
+                                    "$set": {"image_id": gallery_result['image_id']}})
     else:
         slug = slugify(data['gallery_name'])
         gallery_new = {
@@ -149,11 +160,13 @@ def image():
             "gallery_id": str(gallery_result.inserted_id)
         }
         slug = str(gallery_result.inserted_id)+"/"+slug
-        gallery.find_one_and_update({"_id": gallery_result.inserted_id}, {"$set": {"slug": slug}})
+        gallery.find_one_and_update({"_id": gallery_result.inserted_id}, {
+                                    "$set": {"slug": slug}})
         image_result = image.insert_one(image_data)
         gallery_new['image_id'].append(str(image_result.inserted_id))
-        gallery.find_one_and_update({"name": data['gallery_name']}, {"$set": {"image_id": gallery_new['image_id']}})
-        
+        gallery.find_one_and_update({"name": data['gallery_name']}, {
+                                    "$set": {"image_id": gallery_new['image_id']}})
+
     return jsonify({'success': True, 'message': 'Successfully Uploaded'})
 
 
@@ -170,7 +183,8 @@ def gallery():
     }
     gallery_added = gallery.insert_one(gallery_data)
     slug = str(gallery_added.inserted_id)+"/"+slug
-    gallery.find_one_and_update({"_id": gallery_added.inserted_id}, {"$set": {"slug": slug}})
+    gallery.find_one_and_update({"_id": gallery_added.inserted_id}, {
+                                "$set": {"slug": slug}})
     return jsonify({'success': True, 'message': 'Successfully Added Gallery'})
 
 
@@ -209,7 +223,8 @@ def category():
         "slug": slug
     })
     slug = str(category_added.inserted_id)+"/"+slug
-    category.find_one_and_update({"_id": category_added.inserted_id}, {"$set": {"slug": slug}})
+    category.find_one_and_update({"_id": category_added.inserted_id}, {
+                                 "$set": {"slug": slug}})
     return jsonify({'success': True, 'message': 'Successfully Added'})
 
 
@@ -223,7 +238,8 @@ def topic():
         "description": data['description']
     })
     slug = str(topic_added.inserted_id)+"/"+slug
-    topic.find_one_and_update({"_id": topic_added.inserted_id}, {"$set": {"slug": slug}})
+    topic.find_one_and_update({"_id": topic_added.inserted_id}, {
+                              "$set": {"slug": slug}})
     return jsonify({'success': True, 'message': 'Successfully Registered'})
 
 
@@ -239,5 +255,6 @@ def city():
         "name": data['name'].title()
     })
     slug = str(city_added.inserted_id)+"/"+slug
-    city.find_one_and_update({"_id": city_added.inserted_id}, {"$set": {"slug": slug}})
+    city.find_one_and_update({"_id": city_added.inserted_id}, {
+                             "$set": {"slug": slug}})
     return jsonify({'success': True, 'message': 'Successfully Registered'})
