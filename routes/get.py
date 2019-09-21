@@ -206,7 +206,7 @@ def articlePageCity(city):
 @get_blueprint.route("/article/category/<categories>")
 def getCatAllData(categories):
     article = mongo.db.article
-    article_data = article.find({"categories": categories}).sort("timestamp", -1)
+    article_data = article.find({"categories": categories.title()}).sort("timestamp", -1)
     data = []
     for x in article_data:
         x['_id'] = str(x['_id'])
