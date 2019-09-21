@@ -101,10 +101,9 @@ def add():
         "createdBy": data['userName'],
         "uid": data['uid'],
         "slug": slug,
-        "status": data['status']
+        "status": 'published'
     }
     article_added = article.insert_one(article_data)
-    print(article_added.inserted_id)
     slug = str(article_added.inserted_id)+"/"+slug
     article.find_one_and_update({"_id": article_added.inserted_id}, {
                                 "$set": {"slug": slug}})

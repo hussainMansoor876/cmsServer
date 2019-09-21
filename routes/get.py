@@ -160,17 +160,6 @@ def articlePage(city, number):
         data.append(x)
     return jsonify({'data': data[number-10:number]})
 
-@get_blueprint.route("/article/getCity/<city>")
-def articlePageCity(city):
-    article = mongo.db.article
-    print(city)
-    article_data = article.find({"city": city.title() or city.lower() or city.upper()}).sort("timestamp", -1)
-    data = []
-    for x in article_data:
-        x['_id'] = str(x['_id'])
-        data.append(x)
-    return jsonify({'data': data})
-
 @get_blueprint.route("/article/get/<number>")
 def articlePageAll(number):
     number = int(number) * 10
@@ -203,7 +192,18 @@ def articlePageCat(categories, number):
         data.append(x)
     return jsonify({'data': data[number-10:number]})
 
-@get_blueprint.route("/sortCat/<categories>")
+@get_blueprint.route("/article/city/<city>")
+def articlePageCity(city):
+    article = mongo.db.article
+    print(city)
+    article_data = article.find({"city": city.title()}).sort("timestamp", -1)
+    data = []
+    for x in article_data:
+        x['_id'] = str(x['_id'])
+        data.append(x)
+    return jsonify({'data': data})
+
+@get_blueprint.route("/article/category/<categories>")
 def getCatAllData(categories):
     article = mongo.db.article
     article_data = article.find({"categories": categories}).sort("timestamp", -1)
@@ -213,10 +213,10 @@ def getCatAllData(categories):
         data.append(x)
     return jsonify({'data': data})
 
-@get_blueprint.route("/sortTopics/<topics>")
+@get_blueprint.route("/article/topic/<topics>")
 def getTopics(topics):
     article = mongo.db.article
-    article_data = article.find({"topics": topics.title() or topics.lower() or topics.upper()}).sort("timestamp", -1)
+    article_data = article.find({"topics": topics.title()}).sort("timestamp", -1)
     data = []
     for x in article_data:
         x['_id'] = str(x['_id'])
@@ -227,7 +227,7 @@ def getTopics(topics):
 def getTopicsPag(topics, number):
     number = int(number) * 10
     article = mongo.db.article
-    article_data = article.find({"topics": topics.title() or topics.lower() or topics.upper()}).sort("timestamp", -1)
+    article_data = article.find({"topics": topics.title()}).sort("timestamp", -1)
     data = []
     for x in article_data:
         x['_id'] = str(x['_id'])
